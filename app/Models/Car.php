@@ -56,7 +56,6 @@ class Car extends Model
         } catch (QueryException) {
             throw new UserAlreadyIsDrivingException('User are already driving another car.');
         }
-
     }
 
     public function removeUser()

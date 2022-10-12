@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 // use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Exceptions\CarIsBusyException;
+use App\Exceptions\UserAlreadyIsDrivingException;
 use App\Models\Car;
 use App\Models\User;
 use Tests\TestCase;
@@ -37,7 +38,7 @@ class CarAttachTest extends TestCase
     }
 
     /**
-     * @throws CarIsBusyException
+     * @throws CarIsBusyException|\App\Exceptions\UserAlreadyIsDrivingException
      */
     public function test_if_user_already_attached_to_car_there_will_be_thrown_exception()
     {
@@ -46,6 +47,9 @@ class CarAttachTest extends TestCase
         \DB::table('car_user')->delete();
 
         $this->car->giveTo($randomUser);
+
+        $this->withoutExceptionHandling();
+        $this->expectException(CarIsBusyException::class);
 
         $this->json('post', $this->route)
             ->assertStatus(422)
