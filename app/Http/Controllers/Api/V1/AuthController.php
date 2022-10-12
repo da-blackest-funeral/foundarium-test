@@ -122,4 +122,9 @@ class AuthController extends Controller
             'message' => __('auth.logout'),
         ]);
     }
+
+    public function user(): ?User
+    {
+        return \Auth::user();
+    }
 }
