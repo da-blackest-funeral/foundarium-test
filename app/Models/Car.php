@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Exceptions\CarIsBusyException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -38,8 +39,20 @@ class Car extends Model
         return $this->users()->first();
     }
 
+    /**
+     * @throws CarIsBusyException
+     */
     public function giveTo(User $user)
     {
-        $this->users()->sync($user);
+        if (! is_null($this->currentUser())) {
+            throw new CarIsBusyException('This car is busy now.');
+        }
+
+        $this->users()->attach($user);
+    }
+
+    public function removeUser()
+    {
+        $this->users()->detach($this->currentUser());
     }
 }

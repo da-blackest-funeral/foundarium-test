@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -43,8 +44,14 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->renderable(function (CarIsBusyException $exception) {
+            return new JsonResponse([
+                'message' => $exception->getMessage()
+            ], 400);
+        })->renderable(function (Throwable $throwable) {
+            return new JsonResponse([
+                'message' => 'Server Error'
+            ], 500);
         });
     }
 }

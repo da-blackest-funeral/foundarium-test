@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\CarController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,6 +23,11 @@ Route::controller(AuthController::class)
         });
     });
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::controller(CarController::class)
+    ->group(function () {
 
-});
+    });
+
+//Route::middleware('auth:sanctum')->group(function () {
+//
+//});
