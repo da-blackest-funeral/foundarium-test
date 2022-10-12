@@ -27,7 +27,7 @@ Route::controller(CarController::class)
     ->group(function () {
         Route::apiResource('cars', CarController::class);
 
-        Route::post('/cars/{car}/users/{user}', [CarController::class, 'driveCar'])
+        Route::post('/users/{user}/cars/{car}', [CarController::class, 'driveCar'])
             ->name('cars.attach.user');
 
         Route::delete('/users/{user}/cars/', [CarController::class, 'leaveCar'])

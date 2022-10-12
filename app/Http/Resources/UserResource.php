@@ -2,18 +2,18 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Car;
+use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CarResource extends JsonResource
+class UserResource extends JsonResource
 {
-    public function toArray($request): array
+    public function toArray($request)
     {
-        /** @var Car $this */
+        /** @var User $this */
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'driver' => new UserResource($this->currentUser()),
+            'email' => $this->email
         ];
     }
 }
