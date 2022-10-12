@@ -48,7 +48,7 @@ class Car extends Model
             throw new CarIsBusyException('This car is busy now.');
         }
 
-        $this->users()->attach($user);
+        $this->users()->sync($user);
     }
 
     public function removeUser()
