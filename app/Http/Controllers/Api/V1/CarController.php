@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Exceptions\CarIsBusyException;
+use App\Exceptions\UserAlreadyIsDrivingException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CarRequest;
 use App\Http\Resources\CarResource;
@@ -49,20 +49,20 @@ class CarController extends Controller
     }
 
     /**
-     * @throws CarIsBusyException
+     * @throws UserAlreadyIsDrivingException
      */
-    public function assignUser(Car $car, User $user): JsonResponse
+    public function driveCar(Car $car, User $user): JsonResponse
     {
-        $car->giveTo($user);
+        $user->drive($car);
 
         return new JsonResponse([
             'message' => 'car was successfully given to this user'
         ]);
     }
 
-    public function detachUser(Car $car): JsonResponse
+    public function leaveCar(User $user): JsonResponse
     {
-        $car->removeUser();
+        $user->leaveCar();
 
         return new JsonResponse([
             'message' => 'user removed from car'

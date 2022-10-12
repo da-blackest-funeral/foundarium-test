@@ -3,7 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Exceptions\CarIsBusyException;
+use App\Exceptions\UserAlreadyIsDrivingException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -81,5 +84,27 @@ class User extends Authenticatable
     public function currentCar()
     {
         return $this->cars()->first();
+    }
+
+    /**
+     * @throws UserAlreadyIsDrivingException
+     * @throws CarIsBusyException
+     */
+    public function drive(Car $car)
+    {
+        if (! is_null($this->currentCar())) {
+            throw new UserAlreadyIsDrivingException('This user is driving another car now.');
+        }
+
+        try {
+            $this->cars()->sync($car);
+        } catch (QueryException) {
+            throw new CarIsBusyException('The car has already been taken.');
+        }
+    }
+
+    public function leaveCar()
+    {
+        $this->cars()->detach($this->currentCar());
     }
 }

@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use App\Exceptions\CarIsBusyException;
+use App\Exceptions\UserAlreadyIsDrivingException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\QueryException;
 
 /**
  * App\Models\Car
@@ -41,6 +43,7 @@ class Car extends Model
 
     /**
      * @throws CarIsBusyException
+     * @throws UserAlreadyIsDrivingException
      */
     public function giveTo(User $user)
     {
@@ -48,7 +51,12 @@ class Car extends Model
             throw new CarIsBusyException('This car is busy now.');
         }
 
-        $this->users()->sync($user);
+        try {
+            $this->users()->sync($user);
+        } catch (QueryException) {
+            throw new UserAlreadyIsDrivingException('User are already driving another car.');
+        }
+
     }
 
     public function removeUser()

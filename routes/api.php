@@ -27,11 +27,11 @@ Route::controller(CarController::class)
     ->group(function () {
         Route::apiResource('cars', CarController::class);
 
-        Route::post('/cars/{car}/users/{user}', [CarController::class, 'assignUser'])
+        Route::post('/cars/{car}/users/{user}', [CarController::class, 'driveCar'])
             ->name('cars.attach.user');
 
-        Route::delete('cars/{car}/users', [CarController::class, 'detachUser'])
-            ->name('cars.detach.user');
+        Route::delete('/users/{user}/cars/', [CarController::class, 'leaveCar'])
+            ->name('users.detach.car');
     });
 
 //Route::middleware('auth:sanctum')->group(function () {

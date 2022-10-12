@@ -48,9 +48,9 @@ class CarAttachTest extends TestCase
         $this->car->giveTo($randomUser);
 
         $this->json('post', $this->route)
-            ->assertStatus(400)
+            ->assertStatus(422)
             ->assertJsonFragment([
-                'message' => 'This car is busy now.',
+                'message' => 'The car has already been taken.',
             ]);
 
         self::assertEquals($this->car->currentUser()->id, $randomUser->id);

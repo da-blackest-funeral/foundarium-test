@@ -44,10 +44,10 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->renderable(function (CarIsBusyException $exception) {
+        $this->renderable(function (CarIsBusyException|UserAlreadyIsDrivingException $exception) {
             return new JsonResponse([
-                'message' => $exception->getMessage()
-            ], 400);
+                'message' => $exception->getMessage(),
+            ], 422);
         })->renderable(function (Throwable $throwable) {
             return new JsonResponse([
                 'message' => 'Server Error'
